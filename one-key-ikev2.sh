@@ -415,6 +415,8 @@ function SNAT_set(){
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
+        static_ip=""
+    if [ "$static_ip" = "" ]; then
         static_ip=$IP
     fi
     else
