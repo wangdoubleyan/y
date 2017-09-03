@@ -82,7 +82,7 @@ rootness
 
 function getUnzip(){
 apt install unzip
-if wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip then
+if wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip ; then
 unzip cer.zip
 fi
 }
