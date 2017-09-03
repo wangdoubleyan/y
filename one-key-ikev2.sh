@@ -82,11 +82,9 @@ rootness
 
 function getUnzip(){
 apt install unzip
-if(wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip){
+if wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip then
 unzip cer.zip
-
-}
-}
+fi
 }
 
 # Make sure only root can run our script
