@@ -81,7 +81,7 @@ rootness
 }
 
 function getUnzip(){
-if(apt install unzip){
+apt install unzip
 if(wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip){
 unzip cer.zip
 
