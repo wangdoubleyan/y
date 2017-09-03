@@ -409,19 +409,11 @@ EOF
 
 function SNAT_set(){
     echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-    use_SNAT" = "yes"
-    if [ "$use_SNAT" = "yes" ]; then
         use_SNAT_str="1"
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-        static_ip" = ""
-    if [ "$static_ip" = "" ]; then
         static_ip=$IP
-    fi
-    else
-        use_SNAT_str="0"
-    fi
 }
 
 # iptables check
@@ -431,9 +423,7 @@ net.ipv4.ip_forward=1
 EOF
     sysctl --system
     echo "Do you use firewall in CentOS7 instead of iptables?"
-
-        iptables_set
-
+    iptables_set
 }
 
 # firewall set in CentOS7
@@ -455,10 +445,7 @@ function iptables_set(){
     echo "The above content is the network card information of your VPS."
     echo "[$(__yellow "Important")]Please enter the name of the interface which can be connected to the public network."
     if [ "$os" = "1" ]; then
-            read -p "Network card interface(default_value:eth0):" interface
-        if [ "$interface" = "" ]; then
             interface="eth0"
-        fi
         iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
         iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
         iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
@@ -480,8 +467,8 @@ function iptables_set(){
             iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j MASQUERADE
         fi
     else
-    interface="venet0"
-
+            interface="venet0"
+        
         iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
         iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
         iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
