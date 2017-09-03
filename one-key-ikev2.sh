@@ -409,13 +409,13 @@ EOF
 
 function SNAT_set(){
     echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-    use_SNAT="yes"
+    use_SNAT" = "yes"
     if [ "$use_SNAT" = "yes" ]; then
         use_SNAT_str="1"
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-        static_ip=""
+        static_ip" = ""
     if [ "$static_ip" = "" ]; then
         static_ip=$IP
     fi
@@ -433,6 +433,7 @@ EOF
     echo "Do you use firewall in CentOS7 instead of iptables?"
 
         iptables_set
+
 }
 
 # firewall set in CentOS7
