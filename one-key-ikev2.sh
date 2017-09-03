@@ -136,47 +136,11 @@ function pre_install(){
     echo "# Version:$VER"
     echo "#############################################################"
     echo "please choose the type of your VPS(Xen、KVM: 1  ,  OpenVZ: 2):"
-    read -p "your choice(1 or 2):" os_choice
-    if [ "$os_choice" = "1" ]; then
         os="1"
         os_str="Xen、KVM"
-        else
-            if [ "$os_choice" = "2" ]; then
-                os="2"
-                os_str="OpenVZ"
-                else
-                echo "wrong choice!"
-                exit 1
-            fi
-    fi
-    echo "please input the ip (or domain) of your VPS:"
-    read -p "ip or domain(default_value:${IP}):" vps_ip
-    if [ "$vps_ip" = "" ]; then
         vps_ip=$IP
-    fi
-
-    echo "Would you want to import existing cert? You NEED copy your cert file to the same directory of this script"
-    read -p "yes or no?(default_value:no):" have_cert
-    if [ "$have_cert" = "yes" ]; then
         have_cert="1"
-    else
-        have_cert="0"
-        echo "please input the cert country(C):"
-        read -p "C(default value:com):" my_cert_c
-        if [ "$my_cert_c" = "" ]; then
-            my_cert_c="com"
-        fi
-        echo "please input the cert organization(O):"
-        read -p "O(default value:myvpn):" my_cert_o
-        if [ "$my_cert_o" = "" ]; then
-            my_cert_o="myvpn"
-        fi
-        echo "please input the cert common name(CN):"
-        read -p "CN(default value:VPN CA):" my_cert_cn
-        if [ "$my_cert_cn" = "" ]; then
-            my_cert_cn="VPN CA"
-        fi
-    fi
+
 
     echo "####################################"
     get_char(){
@@ -379,7 +343,7 @@ conn ios_ikev2
     esp=aes256-sha256,3des-sha1,aes256-sha1!
     rekey=no
     left=%defaultroute
-    leftid=${vps_ip}
+    leftid=yvpn.vip
     leftsendcert=always
     leftsubnet=0.0.0.0/0
     leftcert=server.cert.pem
