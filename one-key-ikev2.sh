@@ -416,6 +416,10 @@ function SNAT_set(){
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
         static_ip=$IP
+    fi
+    else
+        use_SNAT_str="0"
+    fi
 }
 
 # iptables check
