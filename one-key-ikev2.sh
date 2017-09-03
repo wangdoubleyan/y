@@ -55,6 +55,10 @@ __yellow(){
     fi
 }
 
+VPN_IPSEC_PSK="$(LC_CTYPE=C tr -dc 'A-HJ-NPR-Za-km-z2-9' < /dev/urandom | head -c 16)"
+  VPN_USER=yvpnuser
+  VPN_PASSWORD="$(LC_CTYPE=C tr -dc 'A-HJ-NPR-Za-km-z2-9' < /dev/urandom | head -c 16)"
+
 # Install IKEV2
 function install_ikev2(){
     rootness
@@ -397,27 +401,21 @@ EOF
 function configure_secrets(){
     cat > /usr/local/etc/ipsec.secrets<<-EOF
 : RSA server.pem
-: PSK "myPSKkey"
+: PSK VPN_IPSEC_PSK
 : XAUTH "myXAUTHPass"
-myUserName %any : EAP "myUserPass"
+VPN_USER %any : EAP VPN_PASSWORD
 EOF
 }
 
 function SNAT_set(){
     echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-    read -p "yes or no?(default_value:no):" use_SNAT
+    use_SNAT="yes"
     if [ "$use_SNAT" = "yes" ]; then
         use_SNAT_str="1"
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-        read -p "static ip or network interface ip (default_value:${IP}):" static_ip
-    if [ "$static_ip" = "" ]; then
         static_ip=$IP
-    fi
-    else
-        use_SNAT_str="0"
-    fi
 }
 
 # iptables check
@@ -427,12 +425,8 @@ net.ipv4.ip_forward=1
 EOF
     sysctl --system
     echo "Do you use firewall in CentOS7 instead of iptables?"
-    read -p "yes or no?(default_value:no):" use_firewall
-    if [ "$use_firewall" = "yes" ]; then
-        firewall_set
-    else
+
         iptables_set
-    fi
 }
 
 # firewall set in CentOS7
@@ -479,10 +473,8 @@ function iptables_set(){
             iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j MASQUERADE
         fi
     else
-        read -p "Network card interface(default_value:venet0):" interface
-        if [ "$interface" = "" ]; then
-            interface="venet0"
-        fi
+    interface="venet0"
+
         iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
         iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
         iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
@@ -523,9 +515,9 @@ function success_info(){
     echo -e "# [$(__green "Install Complete")]"
     echo -e "# Version:$VER"
     echo -e "# There is the default login info of your IPSec/IkeV2 VPN Service"
-    echo -e "# UserName:$(__green " myUserName")"
-    echo -e "# PassWord:$(__green " myUserPass")"
-    echo -e "# PSK:$(__green " myPSKkey")"
+    echo -e "# UserName:$(__green  VPN_USER)"
+    echo -e "# PassWord:$(__green  VPN_PASSWORD)"
+    echo -e "# PSK:$(__green  VPN_IPSEC_PSK)"
     echo -e "# you should change default username and password in$(__green " /usr/local/etc/ipsec.secrets")"
     echo -e "# you cert:$(__green " ${cur_dir}/my_key/ca.cert.pem ")"
     if [ "$have_cert" = "1" ]; then
