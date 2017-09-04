@@ -433,7 +433,6 @@ function SNAT_set(){
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
         read -p "static ip or network interface ip (default_value:${IP}):" static_ip
-        static_ip=""
     if [ "$static_ip" = "" ]; then
         static_ip=$IP
     fi
