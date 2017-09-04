@@ -178,7 +178,7 @@ function pre_install(){
     fi
     echo ""
     echo "Press any key to start...or Press Ctrl+C to cancel"
-    char=`get_char`
+    #char=`get_char`
     #Current folder
     cur_dir=`pwd`
     cd $cur_dir
@@ -426,13 +426,14 @@ EOF
 
 function SNAT_set(){
     echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-    read -p "yes or no?(default_value:no):" use_SNAT
+    use_SNAT = "yes"
     if [ "$use_SNAT" = "yes" ]; then
         use_SNAT_str="1"
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-        read -p "static ip or network interface ip (default_value:${IP}):" static_ip
+        #read -p "static ip or network interface ip (default_value:${IP}):" static_ip
+        static_ip=""
     if [ "$static_ip" = "" ]; then
         static_ip=$IP
     fi
@@ -534,6 +535,7 @@ function success_info(){
     echo -e "# [$(__green "Install Complete")]"
     echo -e "# Version:$VER"
     echo -e "# There is the default login info of your IPSec/IkeV2 VPN Service"
+    echo -e "# IP:$(__green  $IP)"
     echo -e "# UserName:$(__green  $VPN_USER)"
     echo -e "# PassWord:$(__green  $VPN_PASSWORD)"
     echo -e "# PSK:$(__green  $VPN_IPSEC_PSK)"
