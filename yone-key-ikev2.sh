@@ -414,31 +414,13 @@ $VPN_USER %any : EAP $VPN_PASSWORD
 EOF
 }
 
-#
-#function SNAT_set(){
-#    echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-#        use_SNAT_str="1"
-#        echo -e "$(__yellow "ip address info:")"
-#        ip address | grep inet
-#        echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-#        static_ip=$IP
-#}
-
 function SNAT_set(){
     echo "Use SNAT could implove the speed,but your server MUST have static ip address."
-    read -p "yes or no?(default_value:no):" use_SNAT
-    if [ "$use_SNAT" = "yes" ]; then
         use_SNAT_str="1"
         echo -e "$(__yellow "ip address info:")"
         ip address | grep inet
         echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
-        read -p "static ip or network interface ip (default_value:${IP}):" static_ip
-    if [ "$static_ip" = "" ]; then
         static_ip=$IP
-    fi
-    else
-        use_SNAT_str="0"
-    fi
 }
 
 # iptables check
