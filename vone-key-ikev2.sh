@@ -530,8 +530,9 @@ EOF
     fi
 }
 
-function closefirewalld{
+function closefirewalld(){
     echo -e "# [$(__red "执行 systemctl stop firewalld.service 关闭防火墙")]"
+    systemctl stop firewalld.service
     
 }
 
