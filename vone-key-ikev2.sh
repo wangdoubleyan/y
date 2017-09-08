@@ -532,6 +532,7 @@ EOF
 
 function closefirewalld(){
     systemctl stop firewalld.service
+    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
     
 }
 
