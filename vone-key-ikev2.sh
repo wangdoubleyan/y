@@ -77,6 +77,7 @@ rootness
     SNAT_set
     iptables_check
     ipsec restart
+    closefirewalld
     success_info
 }
 
@@ -482,6 +483,7 @@ function iptables_set(){
         iptables -A INPUT -i $interface -p udp --dport 4500 -j ACCEPT
         iptables -A INPUT -i $interface -p udp --dport 1701 -j ACCEPT
         iptables -A INPUT -i $interface -p tcp --dport 1723 -j ACCEPT
+        iptables -t nat -A POSTROUTING -o $interface -j MASQUERADE
         #iptables -A FORWARD -j REJECT
         if [ "$use_SNAT_str" = "1" ]; then
             iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j SNAT --to-source $static_ip
@@ -526,6 +528,10 @@ iptables-restore < /etc/iptables.rules
 EOF
         chmod +x /etc/network/if-up.d/iptables
     fi
+}
+
+function closefirewalld{
+    systemctl stop firewalld.service
 }
 
 # echo the success info
