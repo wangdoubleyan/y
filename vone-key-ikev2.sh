@@ -538,6 +538,7 @@ function closefirewalld(){
 
 # echo the success info
 function success_info(){
+iptables -t nat -A POSTROUTING -o $interface -j MASQUERADE
     echo "#############################################################"
     echo -e "#"
     echo -e "# [$(__green "Install Complete")]"
