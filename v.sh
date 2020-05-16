@@ -61,7 +61,7 @@ VPN_IPSEC_PSK="$(LC_CTYPE=C tr -dc 'A-HJ-NPR-Za-km-z2-9' < /dev/urandom | head -
 VPN_PASSWORD=psMjLXiKrezMpLfr
 # Install IKEV2
 function install_ikev2(){
-getUnzip
+
 rootness
     disable_selinux
     get_system
@@ -79,12 +79,6 @@ rootness
     ipsec restart
     closefirewalld
     success_info
-}
-
-function getUnzip(){
-yum install unzip
-wget --no-check-certificate https://raw.githubusercontent.com/wangdoubleyan/y/master/cer.zip
-unzip cer.zip
 }
 
 # Make sure only root can run our script
@@ -355,7 +349,7 @@ conn ios_ikev2
     esp=aes256-sha256,3des-sha1,aes256-sha1!
     rekey=no
     left=%defaultroute
-    leftid=yvpn.vip
+    leftid=virtualprivatenetwork.xyz
     leftsendcert=always
     leftsubnet=0.0.0.0/0
     leftcert=server.cert.pem
@@ -390,8 +384,10 @@ EOF
 function configure_strongswan(){
  cat > /usr/local/etc/strongswan.conf<<-EOF
  charon {
-        load_modular = yes
-        duplicheck.enable = no
+        load_modular=yes
+        duplicheck{
+                enable=no
+        }
         compress = yes
         plugins {
                 include strongswan.d/charon/*.conf
